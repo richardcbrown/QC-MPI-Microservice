@@ -52,18 +52,16 @@ describe('ripple-cdr-lib/lib/services/authRestService', () => {
     });
   });
 
-  xit('should return token', async () => {
+  it('should return token', async () => {
     const expected = {
       access_token: 'foo.bar.baz'
     };
 
-    nock('https://devauth.discoverydataservice.net')
-      .post('/auth/realms/endeavour/protocol/openid-connect/token', [
-        'username=xxxxxxxx',
-        'password=yyyyyyyyyyy', //@TODO how handle real credentials?
-        'client_id=eds-data-checker',
-        'grant_type=password'
-      ].join('&'))
+    nock('https://test:444', {
+      reqheaders: {
+        authorization: `Basic ${ Buffer.from('clientId:clientSecret').toString('base64') }`
+      }})
+      .post('/AuthService/oauth/token')
       .reply(200, {
         access_token: 'foo.bar.baz'
       });
@@ -74,25 +72,36 @@ describe('ripple-cdr-lib/lib/services/authRestService', () => {
     expect(actual).toEqual(expected);
   });
 
-  xit('should throw error', async () => {
-    nock('https://devauth.discoverydataservice.net')
-      .post('/auth/realms/endeavour/protocol/openid-connect/token', [
-        'username=xxxxxxxx',
-        'password=yyyyyyyyyyy', //@TODO how handle real credentials?
-        'client_id=eds-data-checker',
-        'grant_type=password'
-      ].join('&'))
-      .replyWithError({
-        message: 'Error while trying to get auth token',
-        code: 500
+  it('should throw unauthorised error', async () => {
+    
+    nock('https://test:444', {
+      reqheaders: {
+        authorization: `Basic ${ Buffer.from('clientId:clientSecret').toString('base64') }`
+      }})
+      .post('/AuthService/oauth/token')
+      .reply(403, {
+        error: 'invalid_client'
       });
 
     const actual = authService.authenticate();
 
-    await expectAsync(actual).toBeRejectedWith({
-      message: 'Error while trying to get auth token',
-      code: 500
-    });
+    await expectAsync(actual).toBeRejectedWith({ error: 'invalid_client' });
+
+    expect(nock).toHaveBeenDone();
+  });
+
+  it('should throw error', async () => {
+    
+    nock('https://test:444', {
+      reqheaders: {
+        authorization: `Basic ${ Buffer.from('clientId:clientSecret').toString('base64') }`
+      }})
+      .post('/AuthService/oauth/token')
+      .replyWithError(500);
+
+    const actual = authService.authenticate();
+
+    await expectAsync(actual).toBeRejected();
 
     expect(nock).toHaveBeenDone();
   });

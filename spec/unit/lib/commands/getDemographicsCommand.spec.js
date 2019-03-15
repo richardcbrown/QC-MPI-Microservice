@@ -110,12 +110,15 @@ describe('ripple-cdr-lib/lib/commands/getDemographicsCommand', () => {
       gpAddress: 'California',
       address: 'London'
     };
+
+    cacheService.cleanCaches.and.callThrough();
     cacheService.getDemographics.and.returnValue(responseObj);
 
     const command = new GetDemographicsCommand(ctx, session);
     const actual = await command.execute(patientId);
 
     expect(cacheService.getDemographics).toHaveBeenCalledWith(patientId);
+    expect(cacheService.cleanCaches).toHaveBeenCalled();
     expect(actual).toEqual(expected);
   });
 
@@ -134,6 +137,7 @@ describe('ripple-cdr-lib/lib/commands/getDemographicsCommand', () => {
     };
 
     cacheService.getDemographics.and.returnValue(null);
+    cacheService.cleanCaches.and.callThrough();
     mockDemographicsService(patientId);
 
     const command = new GetDemographicsCommand(ctx, session);
@@ -143,6 +147,7 @@ describe('ripple-cdr-lib/lib/commands/getDemographicsCommand', () => {
     expect(resourceService.fetchPatients).toHaveBeenCalledWith(9999999000);
     expect(resourceService.fetchPatientPractitioner).toHaveBeenCalledWith(9999999000);
     expect(demographicService.getByPatientId).toHaveBeenCalledWith(9999999000);
+    expect(cacheService.cleanCaches).toHaveBeenCalled();
 
     expect(actual).toEqual(expected);
   });
@@ -175,5 +180,19 @@ describe('ripple-cdr-lib/lib/commands/getDemographicsCommand', () => {
     expect(demographicService.getByPatientId).toHaveBeenCalledWith(9999999111);
 
     expect(actual).toEqual(expected);
+  });
+
+  it('should clean caches on error', async () => {
+    cacheService.getDemographics.and.returnValue(null);
+    resourceService.fetchPatients.and.throwError('Generic Error');
+    cacheService.cleanCaches.and.callThrough();
+    mockDemographicsService(patientId);
+
+    const command = new GetDemographicsCommand(ctx, session);
+    const actual = command.execute(patientId);
+    
+    expect(cacheService.cleanCaches).toHaveBeenCalled();
+
+    await expectAsync(actual).toBeRejected();
   });
 });

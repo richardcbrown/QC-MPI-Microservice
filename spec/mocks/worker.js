@@ -33,7 +33,7 @@
 const DocumentStore = require('ewd-document-store');
 const DbGlobals = require('ewd-memory-globals');
 const sessions = require('ewd-session');
-const globalConfig = require('../support/global_config.json').DDS;
+const globalConfig = require('../support/fhir_service.config.json');
 const { clone } = require('../helpers/utils');
 
 module.exports = function (config) {
