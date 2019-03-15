@@ -51,12 +51,5 @@ module.exports = async function getPatientDemographics (args, finished) {
     const responseError = getResponseError(err);
     
     finished(responseError);
-
-  } finally {
-
-    const { fetchCache, fhirCache } = args.req.ctx.cache;
-
-    fetchCache.deleteAll();
-    fhirCache.deleteAll();
   }
 };
