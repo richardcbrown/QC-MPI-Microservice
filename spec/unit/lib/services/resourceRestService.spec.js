@@ -61,7 +61,7 @@ describe('ripple-cdr-lib/lib/services/resourceRestService', () => {
 
       expect(actual).toEqual(jasmine.any(ResourceRestService));
       expect(actual.ctx).toBe(ctx);
-      expect(actual.hostConfig).toBe(ctx.serversConfig);
+      expect(actual.hostConfig).toBe(ctx.globalConfig);
     });
   });
 

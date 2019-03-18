@@ -74,7 +74,7 @@ describe('ripple-cdr-lib/lib/services/demographicService', () => {
       patientCache.byNhsNumber.getPatientUuid.and.returnValue('7bb44952-60dd-4ce8-9bbd-f0b56c80a260');
       patientCache.byPatientUuid.get.and.returnValue({
         name: [
-          { text: 'John Doe' }
+          { use: 'official', text: 'John Doe' }
         ],
         gender: 'male',
         telecom : [{
@@ -92,9 +92,10 @@ describe('ripple-cdr-lib/lib/services/demographicService', () => {
       resourceCache.byUuid.existsRelatedUuid.and.returnValue(true);
       resourceCache.byUuid.getRelatedUuid.and.returnValue('1a30d00b-7fe5-44d5-bf18-9909e6fdacd2');
       resourceCache.byUuid.get.and.returnValues({
-        name: {
+        name: [{
+          use: 'official',
           text: 'Jane Doe'
-        }
+        }]
       },
       {
         resourceType: 'Organization',
@@ -165,7 +166,7 @@ describe('ripple-cdr-lib/lib/services/demographicService', () => {
       patientCache.byNhsNumber.getPatientUuid.and.returnValue('7bb44952-60dd-4ce8-9bbd-f0b56c80a260');
       patientCache.byPatientUuid.get.and.returnValue({
         name: [
-          { text: 'John Doe' }
+          { use: 'official', text: 'John Doe' }
         ],
         gender: 'male',
         telecom : [{
@@ -223,7 +224,7 @@ describe('ripple-cdr-lib/lib/services/demographicService', () => {
       patientCache.byNhsNumber.getPatientUuid.and.returnValue('7bb44952-60dd-4ce8-9bbd-f0b56c80a260');
       patientCache.byPatientUuid.get.and.returnValue({
         name: [
-          { text: 'John Doe' }
+          { use: 'official',text: 'John Doe' }
         ],
         gender: 'male',
         telecom : [{
@@ -241,9 +242,9 @@ describe('ripple-cdr-lib/lib/services/demographicService', () => {
       patientCache.byPatientUuid.getPractitionerUuid.and.returnValue('3f2a728b-eda5-4c16-b67d-afeacaacbb1c');
       resourceCache.byUuid.existsRelatedUuid.and.returnValue(false);
       resourceCache.byUuid.get.and.returnValues({
-        name: {
+        name: [{
           text: 'Jane Doe'
-        }
+        }]
       });
 
       const expected = {

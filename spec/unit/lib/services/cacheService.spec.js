@@ -39,6 +39,8 @@ describe('ripple-cdr-lib/lib/services/cacheService', () => {
 
   let cacheService;
   let demographicCache;
+  let fetchCache;
+  let fhirCache;
 
   beforeEach(() => {
     ctx = new ExecutionContextMock();
@@ -46,6 +48,8 @@ describe('ripple-cdr-lib/lib/services/cacheService', () => {
 
     cacheService = new CacheService(ctx);
     demographicCache = ctx.cache.demographicCache;
+    fetchCache = ctx.cache.fetchCache;
+    fhirCache = ctx.cache.fhirCache;
 
     ctx.cache.freeze();
   });
@@ -99,6 +103,19 @@ describe('ripple-cdr-lib/lib/services/cacheService', () => {
       const actual = cacheService.getDemographics(nhsNumber);
 
       expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('#cleanCaches', () => {
+    it('should clean relevant caches', () => {
+      
+      fetchCache.deleteAll.and.callThrough();
+      fhirCache.deleteAll.and.callThrough();
+
+      cacheService.cleanCaches();
+
+      expect(fetchCache.deleteAll).toHaveBeenCalled();
+      expect(fhirCache.deleteAll).toHaveBeenCalled();
     });
   });
 });

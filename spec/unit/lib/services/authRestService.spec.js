@@ -40,12 +40,12 @@ describe('ripple-cdr-lib/lib/services/authRestService', () => {
 
   beforeEach(() => {
     ctx = new ExecutionContextMock();
-    authService = new AuthRestService(ctx, ctx.serversConfig);
+    authService = new AuthRestService(ctx, ctx.globalConfig);
   });
 
   describe('#create (static)', () => {
     it('should initialize a new instance', async () => {
-      const actual = AuthRestService.create(ctx, ctx.serversConfig);
+      const actual = AuthRestService.create(ctx, ctx.globalConfig);
 
       expect(actual).toEqual(jasmine.any(AuthRestService));
       expect(actual.ctx).toBe(ctx);

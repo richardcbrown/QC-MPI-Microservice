@@ -46,7 +46,7 @@ module.exports = async function getPatientDemographics (args, finished) {
     finished(responseObj);
   } catch (err) {
     
-    logger.error(err);
+    logger.error('apis/getPatientDemographics|err', err);
 
     const responseError = getResponseError(err);
     

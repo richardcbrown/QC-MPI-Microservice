@@ -61,7 +61,7 @@ describe('ripple-cdr-lib/lib/services/tokenService', () => {
 
   describe('#create (static)', () => {
     it('should initialize a new instance', async () => {
-      const actual = TokenService.create(ctx, ctx.serversConfig);
+      const actual = TokenService.create(ctx, ctx.globalConfig);
 
       expect(actual).toEqual(jasmine.any(TokenService));
       expect(actual.ctx).toBe(ctx);

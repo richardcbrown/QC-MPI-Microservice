@@ -46,6 +46,18 @@ describe('ripple-cdr-lib/lib/cache/resourceCache', () => {
           data: {
             foo: 'bar'
           },
+          'practitioner': 'bb64855d-e99d-403c-9e8a-b4c8ce30c345',
+          'organization': 'd4003300-c671-4a14-974b-02bceeddd8e5'
+        }
+      }
+    });
+
+    qewdSession.data.$(['Fhir', 'MedicationStatement']).setDocument({
+      'by_query': {
+        'testquery=true': {
+          data: {
+            foo: 'bar'
+          },
           'practitioner': 'bb64855d-e99d-403c-9e8a-b4c8ce30c345'
         }
       }
@@ -135,6 +147,61 @@ describe('ripple-cdr-lib/lib/cache/resourceCache', () => {
       });
     });
 
+    describe('#getRelatedUuid', () => {
+      it('should get id of related resource', () => {
+        const expected = 'd4003300-c671-4a14-974b-02bceeddd8e5';
+
+        seeds();
+
+        const actual = resourceCache.byUuid.getRelatedUuid(resourceName, uuid, 'organization');
+      
+        expect(actual).toEqual(expected);
+      });
+    });
+
+    describe('#existsRelatedUuid', () => {
+      it('should return true when related resource exists', () => {
+        const expected = true;
+
+        seeds();
+
+        const actual = resourceCache.byUuid.existsRelatedUuid(resourceName, uuid, 'organization');
+      
+        expect(actual).toEqual(expected);
+      });
+
+      it('should return false when related resource does not exists', () => {
+        const expected = false;
+
+        qewdSession.data.$(['Fhir', 'MedicationStatement']).setDocument({
+          'by_uuid': {
+            '550b6681-9160-4543-9d1e-46f220a6cd79': {
+              data: {
+                foo: 'bar'
+              },
+              'practitioner': 'bb64855d-e99d-403c-9e8a-b4c8ce30c345'
+            }
+          }
+        });
+
+        const actual = resourceCache.byUuid.existsRelatedUuid(resourceName, uuid, 'organization');
+      
+        expect(actual).toEqual(expected);
+      });
+    });
+
+    describe('#setRelatedUuid', () => {
+      it('should set resource related uuid', () => {
+        const expected = 'a87da744-d4f5-42e1-accf-47a3af77dcfc';
+
+        resourceCache.byUuid.setRelatedUuid(resourceName, uuid, 'test', 'a87da744-d4f5-42e1-accf-47a3af77dcfc');
+
+        const actual = resourceCache.byUuid.getRelatedUuid(resourceName, uuid, 'test');
+
+        expect(actual).toEqual(expected);
+      });
+    });
+
     describe('#get', () => {
       it('should get resource data', () => {
         const expected = {
@@ -170,6 +237,83 @@ describe('ripple-cdr-lib/lib/cache/resourceCache', () => {
         seeds();
 
         const actual = resourceCache.byUuid.getPractitionerUuid(resourceName, uuid);
+
+        expect(actual).toEqual(expected);
+      });
+    });
+  });
+
+  describe('#byQuery', () => {
+    let resourceName;
+    let query;
+
+    beforeEach(() => {
+      resourceName = 'MedicationStatement';
+      query = 'testquery=true';
+    });
+
+    describe('#exists', () => {
+      it('should return false', () => {
+
+        const falseyQuery = 'testquery=false';
+        
+        const expected = false;
+
+        const actual = resourceCache.byQuery.exists(resourceName, falseyQuery);
+
+        expect(actual).toEqual(expected);
+      });
+
+      it('should return true', () => {
+        const expected = true;
+
+        seeds();
+        const actual = resourceCache.byQuery.exists(resourceName, query);
+
+        expect(actual).toEqual(expected);
+      });
+    });
+
+    describe('#set', () => {
+      it('should set resource data', () => {
+        const expected = {
+          quux: 'quuz'
+        };
+
+        const resource = {
+          quux: 'quuz'
+        };
+        resourceCache.byQuery.set(resourceName, query, resource);
+
+        const actual = qewdSession.data.$(['Fhir', resourceName, 'by_query', query, 'data']).getDocument();
+        expect(actual).toEqual(expected);
+      });
+
+      it('should ignore settings resource data', () => {
+        const expected = {
+          foo: 'bar'
+        };
+
+        seeds();
+
+        const resource = {
+          quux: 'quuz'
+        };
+        resourceCache.byQuery.set(resourceName, query, resource);
+
+        const actual = qewdSession.data.$(['Fhir', resourceName, 'by_query', query, 'data']).getDocument();
+        expect(actual).toEqual(expected);
+      });
+    });
+
+    describe('#get', () => {
+      it('should get resource data', () => {
+        const expected = {
+          foo: 'bar'
+        };
+
+        seeds();
+        const actual = resourceCache.byQuery.get(resourceName, query);
 
         expect(actual).toEqual(expected);
       });

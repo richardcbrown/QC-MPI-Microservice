@@ -340,6 +340,34 @@ describe('ripple-cdr-lib/lib/cache/patientCache', () => {
 
         expect(actual).toEqual(expected);
       });
+
+      it('should return true for practitioner uuid by patient uuid', () => {
+        const expected = true;
+
+        seeds();
+        const actual = patientCache.byPatientUuid.existsPractitionerUuid(patientUuid);
+
+        expect(actual).toEqual(expected);
+      });
+
+      it('should return false for practitioner uuid not existing by patient uuid', () => {
+        const expected = false;
+
+        qewdSession.data.$(['Fhir', 'Patient']).setDocument({
+          'by_uuid': {
+            '888c1383-c07c-400d-99aa-f30350bdb984': {
+              'data': {
+                foo: 'bar',
+                testArray: [3, 4]
+              }
+            }
+          }
+        });
+
+        const actual = patientCache.byPatientUuid.existsPractitionerUuid(patientUuid);
+
+        expect(actual).toEqual(expected);
+      });
     });
 
     describe('#getByPatientUuids', () => {

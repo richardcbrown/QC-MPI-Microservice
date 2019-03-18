@@ -60,7 +60,4 @@ module.exports = function (config) {
   };
 
   this.qewdSessionByJWT = jasmine.createSpy();
-  this.jwt.handlers = {
-    validateRestRequest: jasmine.createSpy()
-  };
 };
