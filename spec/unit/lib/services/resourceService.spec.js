@@ -33,7 +33,7 @@
 const { ExecutionContextMock } = require('@tests/mocks');
 const ResourceService = require('@lib/services/resourceService');
 
-describe('ripple-cdr-lib/lib/services/resourceService', () => {
+describe('lib/services/resourceService', () => {
   let ctx;
   let resourceService;
 

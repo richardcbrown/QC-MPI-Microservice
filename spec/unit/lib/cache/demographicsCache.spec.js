@@ -33,7 +33,7 @@
 const { ExecutionContextMock } = require('@tests/mocks');
 const { DemographicCache } = require('@lib/cache');
 
-describe('ripple-cdr-lib/lib/cache/demographicsCache', () => {
+describe('lib/cache/demographicsCache', () => {
   let ctx;
   let nhsNumber;
 

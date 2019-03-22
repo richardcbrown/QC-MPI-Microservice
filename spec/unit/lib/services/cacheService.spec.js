@@ -33,7 +33,7 @@
 const { ExecutionContextMock } = require('@tests/mocks');
 const CacheService = require('@lib/services/cacheService');
 
-describe('ripple-cdr-lib/lib/services/cacheService', () => {
+describe('lib/services/cacheService', () => {
   let ctx;
   let nhsNumber;
 
@@ -108,9 +108,6 @@ describe('ripple-cdr-lib/lib/services/cacheService', () => {
 
   describe('#cleanCaches', () => {
     it('should clean relevant caches', () => {
-      
-      fetchCache.deleteAll.and.callThrough();
-      fhirCache.deleteAll.and.callThrough();
 
       cacheService.cleanCaches();
 

@@ -34,18 +34,18 @@ const { ExecutionContextMock } = require('@tests/mocks');
 const AuthRestService = require('@lib/services/authRestService');
 const nock = require('nock');
 
-describe('ripple-cdr-lib/lib/services/authRestService', () => {
+describe('lib/services/authRestService', () => {
   let ctx;
   let authService;
 
   beforeEach(() => {
     ctx = new ExecutionContextMock();
-    authService = new AuthRestService(ctx, ctx.globalConfig);
+    authService = new AuthRestService(ctx, ctx.globalConfig.auth);
   });
 
   describe('#create (static)', () => {
     it('should initialize a new instance', async () => {
-      const actual = AuthRestService.create(ctx, ctx.globalConfig);
+      const actual = AuthRestService.create(ctx, ctx.globalConfig.auth);
 
       expect(actual).toEqual(jasmine.any(AuthRestService));
       expect(actual.ctx).toBe(ctx);

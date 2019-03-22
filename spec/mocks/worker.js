@@ -34,6 +34,7 @@ const DocumentStore = require('ewd-document-store');
 const DbGlobals = require('ewd-memory-globals');
 const sessions = require('ewd-session');
 const globalConfig = require('../support/fhir_service.config.json');
+const searchConfig = require('../support/fhir_service.search.json');
 const { clone } = require('../helpers/utils');
 
 module.exports = function (config) {
@@ -42,7 +43,8 @@ module.exports = function (config) {
 
   this.userDefined = {
     config: config || {},
-    globalConfig: clone(globalConfig)
+    globalConfig: clone(globalConfig),
+    searchConfig: clone(searchConfig)
   };
 
   sessions.init(this.documentStore);

@@ -33,7 +33,7 @@
 const { ExecutionContextMock } = require('@tests/mocks');
 const DemographicService = require('@lib/services/demographicService');
 
-describe('ripple-cdr-lib/lib/services/demographicService', () => {
+describe('lib/services/demographicService', () => {
   let ctx;
   let nhsNumber;
 

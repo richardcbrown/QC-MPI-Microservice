@@ -33,7 +33,7 @@
 const { ExecutionContextMock } = require('@tests/mocks');
 const TokenService = require('@lib/services/tokenService');
 
-describe('ripple-cdr-lib/lib/services/tokenService', () => {
+describe('lib/services/tokenService', () => {
   let ctx;
   let nowTime;
 

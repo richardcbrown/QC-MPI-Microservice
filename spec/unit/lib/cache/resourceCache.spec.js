@@ -33,7 +33,7 @@
 const { ExecutionContextMock } = require('@tests/mocks');
 const { ResourceCache } = require('@lib/cache');
 
-describe('ripple-cdr-lib/lib/cache/resourceCache', () => {
+describe('lib/cache/resourceCache', () => {
   let ctx;
 
   let qewdSession;

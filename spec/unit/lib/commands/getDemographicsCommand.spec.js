@@ -35,7 +35,7 @@ const { GetDemographicsCommand } = require('@lib/commands');
 const { Role } = require('@lib/shared/enums');
 const { BadRequestError } = require('@lib/errors');
 
-describe('ripple-cdr-lib/lib/commands/getDemographicsCommand', () => {
+describe('lib/commands/getDemographicsCommand', () => {
   let ctx;
   let session;
   let patientId;

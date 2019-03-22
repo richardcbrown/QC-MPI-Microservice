@@ -34,7 +34,7 @@ const { ExecutionContextMock } = require('@tests/mocks');
 const ResourceRestService = require('@lib/services/resourceRestService');
 const nock = require('nock');
 
-describe('ripple-cdr-lib/lib/services/resourceRestService', () => {
+describe('lib/services/resourceRestService', () => {
   let ctx;
   let token;
 
@@ -52,7 +52,7 @@ describe('ripple-cdr-lib/lib/services/resourceRestService', () => {
       }
     };
 
-    resourceRestService = new ResourceRestService(ctx, hostConfig);
+    resourceRestService = new ResourceRestService(ctx, hostConfig.api);
   });
 
   describe('#create (static)', () => {
@@ -61,7 +61,7 @@ describe('ripple-cdr-lib/lib/services/resourceRestService', () => {
 
       expect(actual).toEqual(jasmine.any(ResourceRestService));
       expect(actual.ctx).toBe(ctx);
-      expect(actual.hostConfig).toBe(ctx.globalConfig);
+      expect(actual.hostConfig).toBe(ctx.globalConfig.api);
     });
   });
 

@@ -33,7 +33,7 @@
 const mockery = require('mockery');
 const { ExecutionContextMock, CommandMock } = require('@tests/mocks');
 
-describe('ripple-cdr-lib/lib/handlers/getDemographics', () => {
+describe('lib/handlers/getDemographics', () => {
   let args;
   let finished;
   let command;

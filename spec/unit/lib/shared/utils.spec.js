@@ -38,7 +38,7 @@ const {
   parseName
 } = require('@lib/shared/utils');
 
-describe('ripple-cdr-lib/lib/shared/utils', () => {
+describe('lib/shared/utils', () => {
   describe('#getPractitionerRef', () => {
     it('should return null if not Patient resource', () => {
       const notPatient = {

@@ -33,7 +33,7 @@
 const { ExecutionContextMock } = require('@tests/mocks');
 const { TokenCache } = require('@lib/cache');
 
-describe('ripple-cdr-lib/lib/cache/tokenCache', () => {
+describe('lib/cache/tokenCache', () => {
   let ctx;
 
   let tokenCache;

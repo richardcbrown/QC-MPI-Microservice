@@ -26,10 +26,12 @@
 
 const { logger } = require('./lib/core');
 const config = require('./configuration/fhir_service.config');
+const searchConfig = require('./configuration/fhir_service.search');
 
 module.exports = async function () {
 
   logger.info('FhirService - onWorkerLoad');
 
   this.userDefined.globalConfig = config;
+  this.userDefined.searchConfig = searchConfig;
 };
