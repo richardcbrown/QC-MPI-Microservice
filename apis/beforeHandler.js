@@ -63,8 +63,8 @@ module.exports = function (req, finished) { // eslint-disable-line no-unused-var
 
   logger.info('beforeHandler in fhir_service invoked!');
 
-
   req.qewdSession = this.qewdSessionByJWT.call(this, req);
-  req.ctx = ExecutionContext.fromQewdSession(this, req.qewdSession);
+  req.ctx = ExecutionContext.fromQewdSession(this, req.qewdSession, req.session);
+
   return true;
 };

@@ -64,7 +64,7 @@ describe('apis/beforeHandler', () => {
 
     beforeHandler.call(q, req, finished);
 
-    expect(ExecutionContext.fromQewdSession).toHaveBeenCalledWith(q, qewdSession);
+    expect(ExecutionContext.fromQewdSession).toHaveBeenCalledWith(q, qewdSession, req.session);
     expect(req.ctx).toBe(ctxMock);
   });
 });

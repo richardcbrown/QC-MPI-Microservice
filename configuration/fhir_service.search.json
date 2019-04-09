@@ -1,6 +1,6 @@
 {
   "Patient": {
-    "nhsNumber": "identifier={{ Patient.nhsNumber }}"
+    "nhsNumber": "identifier=https://fhir.nhs.uk/Id/nhs-number|{{ Patient.nhsNumber }}"
   },
   "PractitionerRole": {
     "practitionerReference": "practitioner={{ PractitionerRole.practitionerReference }}"

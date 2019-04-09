@@ -24,6 +24,7 @@
   14 March 2019
 */
 
+const fs = require('fs');
 const { logger } = require('./lib/core');
 const config = require('./configuration/fhir_service.config');
 const searchConfig = require('./configuration/fhir_service.search');
@@ -34,4 +35,8 @@ module.exports = async function () {
 
   this.userDefined.globalConfig = config;
   this.userDefined.searchConfig = searchConfig;
+
+  if (config.auth.grant_type === 'urn:ietf:params:oauth:grant-type:jwt-bearer') {
+    this.userDefined.globalConfig.auth.privateKey = fs.readFileSync(__dirname + '/configuration/privateKey.key');
+  }
 };

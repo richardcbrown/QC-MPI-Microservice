@@ -33,6 +33,8 @@
 const { ExecutionContextMock } = require('@tests/mocks');
 const AuthRestService = require('@lib/services/authRestService');
 const nock = require('nock');
+const fs = require('fs');
+const jwt = require('jwt-simple');
 
 describe('lib/services/authRestService', () => {
   let ctx;
@@ -72,6 +74,35 @@ describe('lib/services/authRestService', () => {
     expect(actual).toEqual(expected);
   });
 
+  it('should return token for jwt-bearer grant type', async () => {
+    const context = new ExecutionContextMock();
+    context.globalConfig.auth.privateKey = fs.readFileSync(__dirname + '/../../../support/testPrivateKey.pem');
+    context.globalConfig.auth.grant_type = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
+    context.session = {
+      openid: {}
+    };
+
+    const auth = new AuthRestService(context, context.globalConfig.auth);
+    
+    const expected = {
+      access_token: 'foo.bar.baz'
+    };
+
+    nock('https://test:444', {
+      reqheaders: {
+        authorization: `Basic ${ Buffer.from('clientId:clientSecret').toString('base64') }`
+      }})
+      .post('/AuthService/oauth/token')
+      .reply(200, {
+        access_token: 'foo.bar.baz'
+      });
+
+    const actual = await auth.authenticate();
+
+    expect(nock).toHaveBeenDone();
+    expect(actual).toEqual(expected);
+  });
+
   it('should throw unauthorised error', async () => {
     
     nock('https://test:444', {
@@ -104,5 +135,57 @@ describe('lib/services/authRestService', () => {
     await expectAsync(actual).toBeRejected();
 
     expect(nock).toHaveBeenDone();
+  });
+
+  describe('#getOptionsForJwtBearerGrant', () => {    
+    it('should return correct options for jwt bearer grant type', () => {
+      const context = new ExecutionContextMock();
+      context.globalConfig.auth.privateKey = fs.readFileSync(__dirname + '/../../../support/testPrivateKey.pem');
+      context.globalConfig.auth.grant_type = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
+      context.session = {
+        openid: {
+          firstName: 'TestFN',
+          lastName: 'TestLN'
+        },
+        role: 'TestRole',
+        email: 'TestEmail'
+      };
+
+      const issuedAt = new Date();
+
+      const assertion = {
+        iss: 'T1',
+        aud: 'T2',
+        ods: 'T3',
+        scope: 'T4',
+        src: 'T5',
+        jti: 'testjwtid',
+        iat: issuedAt.getTime(),
+        exp: issuedAt.getTime() + (3600 * 1000),
+        username: 'TestFN TestLN',
+        roles: 'TestRole',
+        jobRole: 'TestRole',
+        sub: 'TestEmail'
+      };
+
+      const expected = {
+        url: 'https://test:444/AuthService/oauth/token',
+        method: 'POST',
+        form: {
+          grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+          assertion: jwt.encode(assertion, context.globalConfig.auth.privateKey, 'RS256')
+        },
+        headers: {
+          authorization: `Basic ${ Buffer.from('clientId:clientSecret').toString('base64') }`
+        },
+        json: true
+      };
+
+      const auth = new AuthRestService(context, context.globalConfig.auth);
+
+      const actual = auth.getOptionsForJwtBearerGrant(context.session, 'testjwtid', issuedAt);
+
+      expect(actual).toEqual(expected);
+    });
   });
 });
