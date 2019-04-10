@@ -1,0 +1,11 @@
+{
+  "address": "{{address}}",
+  "gender": "{{gender}}",
+  "gpAddress": "{{gpAddress}}",
+  "gpName": "{{gpName}}",
+  "id": "{{id}}",
+  "name": "{{name}}",
+  "nhsNumber": "{{nhsNumber}}",
+  "phone": "{{telephone}}",
+  "dateOfBirth": "{{dateOfBirth}}"
+}
