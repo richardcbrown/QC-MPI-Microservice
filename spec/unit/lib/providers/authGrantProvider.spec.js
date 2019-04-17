@@ -9,7 +9,7 @@
  | http://rippleosi.org                                                     |
  | Email: code.custodian@rippleosi.org                                      |
  |                                                                          |
- | Author: Rob Tweed, M/Gateway Developments Ltd                            |
+ | Author: Richard Brown                                                    |
  |                                                                          |
  | Licensed under the Apache License, Version 2.0 (the "License");          |
  | you may not use this file except in compliance with the License.         |
@@ -24,41 +24,45 @@
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
 
-  14 March 2019
+  17 April 2019
 
 */
 
 'use strict';
 
-const CacheRegistry = require('./cache');
-const ServiceRegistry = require('./services');
+const { ExecutionContextMock } = require('@tests/mocks');
+const ClientCredentialsGrantProvider = require('@lib/providers/clientCredentialsGrantProvider');
+const JwtBearerGrantProvider = require('@lib/providers/jwtBearerGrantProvider');
+const AuthGrantProvider = require('@lib/providers/authGrantProvider');
 
-class ExecutionContext {
-  constructor(q, { req, qewdSession }) {
-    this.worker = q;
-    this.userDefined = q.userDefined;
+describe('lib/providers/clientCredentialsGrantProvider', () => {
+  let ctx;
 
-    this.qewdSession = qewdSession || q.qewdSessionByJWT.call(q, req);
+  beforeEach(() => {
+    ctx = new ExecutionContextMock();
+  });
 
-    this.cache = CacheRegistry.create(this);
-    this.services = ServiceRegistry.create(this);
-  }
+  describe('#create (static)', () => {
+    it('should initialize a new instance of ClientCredentialsGrantProvider', async () => {
+      ctx.globalConfig.auth.grant_type = 'client_credentials';
 
-  static fromRequest(q, req) {
-    return new ExecutionContext(q, { req });
-  }
+      const actual = AuthGrantProvider.create(ctx, ctx.globalConfig.auth);
 
-  static fromQewdSession(q, qewdSession) {
-    return new ExecutionContext(q, { qewdSession });
-  }
+      expect(actual).toEqual(jasmine.any(ClientCredentialsGrantProvider));
+    });
 
-  get globalConfig() {
-    return this.userDefined.globalConfig;
-  }
+    it('should initialize a new instance of JwtBearerGrantProvider', async () => {
+      ctx.globalConfig.auth.grant_type = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
 
-  get searchConfig() {
-    return this.userDefined.searchConfig;
-  }
-}
+      const actual = AuthGrantProvider.create(ctx, ctx.globalConfig.auth);
 
-module.exports = ExecutionContext;
+      expect(actual).toEqual(jasmine.any(JwtBearerGrantProvider));
+    });
+
+    it('should throw an error with an invalid grant_type', () => {
+      ctx.globalConfig.auth.grant_type = 'not_valid';
+
+      expect(() => AuthGrantProvider.create(ctx, ctx.globalConfig.auth)).toThrow(new Error('Invalid grant_type: not_valid, check configuration file.'));
+    });
+  });
+});

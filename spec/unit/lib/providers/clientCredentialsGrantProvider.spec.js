@@ -1,14 +1,15 @@
 /*
 
  ----------------------------------------------------------------------------
+ | ripple-fhir-service: Ripple FHIR Interface                               |
  |                                                                          |
- | Copyright (c) 2018-19 Ripple Foundation Community Interest Company       |
+ | Copyright (c) 2017-19 Ripple Foundation Community Interest Company       |
  | All rights reserved.                                                     |
  |                                                                          |
  | http://rippleosi.org                                                     |
  | Email: code.custodian@rippleosi.org                                      |
  |                                                                          |
- | Author: Alexey Kucherenko <alexei.kucherenko@gmail.com>                  |
+ | Author: Richard Brown                                                    |
  |                                                                          |
  | Licensed under the Apache License, Version 2.0 (the "License");          |
  | you may not use this file except in compliance with the License.         |
@@ -23,48 +24,49 @@
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
 
-  18 March 2019
+  17 April 2019
 
 */
 
 'use strict';
 
-const { ExecutionContext } = require('@lib/core');
-const { Worker } = require('@tests/mocks');
-const beforeHandler = require('@apis/beforeHandler');
+const { ExecutionContextMock } = require('@tests/mocks');
+const ClientCredentialsGrantProvider = require('@lib/providers/clientCredentialsGrantProvider');
 
-describe('apis/beforeHandler', () => {
-  let q;
-  let req;
-  let finished;
-
-  let qewdSession;
+describe('lib/providers/clientCredentialsGrantProvider', () => {
+  let ctx;
 
   beforeEach(() => {
-    q = new Worker();
+    ctx = new ExecutionContextMock();
 
-    req = {};
-    finished = jasmine.createSpy();
-
-    qewdSession =  q.sessions.create('mock');
-    q.qewdSessionByJWT.and.returnValue(qewdSession);
+    ctx.globalConfig.auth.grant_type = 'client_credentials';
   });
 
-  it('should set req.qewdSession', async () => {
-    beforeHandler.call(q, req, finished);
+  describe('#create (static)', () => {
+    it('should initialize a new instance', async () => {
+      const actual = ClientCredentialsGrantProvider.create(ctx.globalConfig.auth);
 
-    expect(q.qewdSessionByJWT).toHaveBeenCalledWithContext(q, req);
-    expect(req.qewdSession).toBe(qewdSession);
+      expect(actual).toEqual(jasmine.any(ClientCredentialsGrantProvider));
+    });
   });
 
-  it('should set req.ctx', async () => {
-    const ctxMock = {};
+  describe('#applyAuthenticationScheme', () => {
+    it('should apply the authentication scheme', () => {
 
-    spyOn(ExecutionContext, 'fromQewdSession').and.returnValue(ctxMock);
+      const provider = new ClientCredentialsGrantProvider(ctx.globalConfig.auth);
 
-    beforeHandler.call(q, req, finished);
+      const options = {
+        url: 'https://test:444/AuthService/oauth/token',
+        method: 'POST',
+        headers: {
+          authorization: `Basic ${ Buffer.from('clientId:clientSecret').toString('base64') }`
+        },
+        json: true
+      };
 
-    expect(ExecutionContext.fromQewdSession).toHaveBeenCalledWith(q, qewdSession);
-    expect(req.ctx).toBe(ctxMock);
+      const actual = provider.applyAuthenticationScheme(options);
+
+      expect(actual.form.grant_type).toEqual('client_credentials');
+    });
   });
 });
