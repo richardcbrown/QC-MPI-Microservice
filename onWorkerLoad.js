@@ -7,7 +7,7 @@
  | http://rippleosi.org                                                     |
  | Email: code.custodian@rippleosi.org                                      |
  |                                                                          |
- | Author: Rob Tweed, M/Gateway Developments Ltd                            |
+ | Author: Richard Brown                                                    |
  |                                                                          |
  | Licensed under the Apache License, Version 2.0 (the "License");          |
  | you may not use this file except in compliance with the License.         |
@@ -21,13 +21,23 @@
  | See the License for the specific language governing permissions and      |
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
-  14 March 2019
+  23 April 2019
 */
 
 const fs = require('fs');
 const { logger } = require('./lib/core');
 const config = require('./configuration/fhir_service.config');
 const searchConfig = require('./configuration/fhir_service.search');
+
+/* 
+  allows bypass of certificate validation
+  when the certificate is unsigned
+  this should only be false in non-production
+  environments
+*/
+if (config.rejectUnauthorized === false) {
+  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+}
 
 module.exports = async function () {
 

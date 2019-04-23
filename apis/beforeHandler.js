@@ -8,7 +8,7 @@
  | http://rippleosi.org                                                     |
  | Email: code.custodian@rippleosi.org                                      |
  |                                                                          |
- | Author: Rob Tweed, M/Gateway Developments Ltd                            |
+ | Author: Richard Brown                                                    |
  |                                                                          |
  | Licensed under the Apache License, Version 2.0 (the "License");          |
  | you may not use this file except in compliance with the License.         |
@@ -23,7 +23,7 @@
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
 
-  14 March 2019
+  23 April 2019
 
 */
 
@@ -50,11 +50,6 @@
 
 
 */
-
-if (process.env.node_env === 'development') {
-  //@TODO - REMOVE
-  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
-}
 
 const { logger } = require('../lib/core');
 const { ExecutionContext } = require('../lib/core');

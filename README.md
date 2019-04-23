@@ -24,9 +24,12 @@ The fhir_service config contains the following properties:
   },
   "api": {
     "host": "https://<FhirEndpoint>/FHIRService"
-  }
+  },
+  rejectUnauthorized: true
 }
 ```
+
+The rejectUnauthorized property allows the service to connect to servers using self-signed certificates (e.g. test/staging servers without valid SSL certificates). If the property is set to true, or omitted completely, the service will reject connections to servers that do not have valid certificates. It should be set to false only for testing environments.
 
 grant_type can be one of two options: client_credentials or urn:ietf:params:oauth:grant-type:jwt-bearer
 
