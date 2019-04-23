@@ -24,7 +24,7 @@
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
 
-  17 April 2019
+  23 April 2019
 
 */
 
@@ -51,15 +51,6 @@ describe('lib/providers/jwtBearerGrantProvider', () => {
       role: 'TestRole',
       email: 'TestEmail'
     };
-  });
-
-  describe('#create (static)', () => {
-    it('should initialize a new instance', async () => {
-      const actual = JwtBearerGrantProvider.create(ctx, ctx.globalConfig.auth);
-
-      expect(actual).toEqual(jasmine.any(JwtBearerGrantProvider));
-      expect(actual.ctx).toBe(ctx);
-    });
   });
 
   describe('#applyAuthenticationScheme', () => {

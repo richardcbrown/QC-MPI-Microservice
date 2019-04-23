@@ -24,7 +24,7 @@
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
 
-  17 April 2019
+  23 April 2019
 
 */
 
@@ -40,14 +40,6 @@ describe('lib/providers/clientCredentialsGrantProvider', () => {
     ctx = new ExecutionContextMock();
 
     ctx.globalConfig.auth.grant_type = 'client_credentials';
-  });
-
-  describe('#create (static)', () => {
-    it('should initialize a new instance', async () => {
-      const actual = ClientCredentialsGrantProvider.create(ctx.globalConfig.auth);
-
-      expect(actual).toEqual(jasmine.any(ClientCredentialsGrantProvider));
-    });
   });
 
   describe('#applyAuthenticationScheme', () => {
