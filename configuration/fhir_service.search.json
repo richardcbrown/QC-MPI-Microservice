@@ -4,5 +4,11 @@
   },
   "PractitionerRole": {
     "practitionerReference": "practitioner={{ PractitionerRole.practitionerReference }}"
+  },
+  "Policy": {
+    "name": "name={{ Policy.name }}"
+  },
+  "Consent": {
+    "consentor": "consentor={{ Consent.consentor }}"
   }
 }

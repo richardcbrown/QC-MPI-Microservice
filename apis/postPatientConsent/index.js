@@ -1,9 +1,8 @@
 /*
 
  ----------------------------------------------------------------------------
- | ripple-fhir-service: Ripple FHIR Interface                     |
  |                                                                          |
- | Copyright (c) 2018-19 Ripple Foundation Community Interest Company       |
+ | Copyright (c) 2019 Ripple Foundation Community Interest Company          |
  | All rights reserved.                                                     |
  |                                                                          |
  | http://rippleosi.org                                                     |
@@ -30,14 +29,27 @@
 
 'use strict';
 
-const GetDemographicsCommand = require('./getDemographicsCommand');
-const GetPatientConsentCommand = require('./getPatientConsentCommand');
-const GetPoliciesCommand = require('./getPoliciesCommand');
-const PostConsentCommand = require('./postConsentCommand');
+const { logger } = require('../../lib/core');
+const { PostConsentCommand } = require('../../lib/commands');
+const { getResponseError } = require('../../lib/errors');
 
-module.exports = {
-  GetDemographicsCommand,
-  GetPatientConsentCommand,
-  GetPoliciesCommand,
-  PostConsentCommand
+/**
+ * @param  {Object} args
+ * @param  {Function} finished
+ */
+module.exports = async function postPatientConsent (args, finished) {
+
+  try {
+    const command = new PostConsentCommand(args.req.ctx, args.session);
+    const responseObj = await command.execute(args.req.body);
+    
+    finished(responseObj);
+  } catch (err) {
+    
+    logger.error('apis/postPatientConsent|err', err);
+
+    const responseError = getResponseError(err);
+    
+    finished(responseError);
+  }
 };
