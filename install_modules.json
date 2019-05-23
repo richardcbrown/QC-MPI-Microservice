@@ -6,5 +6,6 @@
     "valid-url",
     "bluebird",
     "fast-safe-stringify",
+    "uuid",
     "winston"
 ]
