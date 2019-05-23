@@ -5,10 +5,7 @@
  | Copyright (c) 2019 Ripple Foundation Community Interest Company          |
  | All rights reserved.                                                     |
  |                                                                          |
- | http://rippleosi.org                                                     |
- | Email: code.custodian@rippleosi.org                                      |
- |                                                                          |
- | Author: Rob Tweed, M/Gateway Developments Ltd                            |
+ | Author: Richard Brown                                                    |
  |                                                                          |
  | Licensed under the Apache License, Version 2.0 (the "License");          |
  | you may not use this file except in compliance with the License.         |
@@ -23,7 +20,7 @@
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
 
-  14 March 2019
+  23 May 2019
 
 */
 
@@ -38,7 +35,7 @@ const url = require('url');
  * @param  {Object} args
  * @param  {Function} finished
  */
-module.exports = async function getPatientDemographics (args, finished) {
+module.exports = async function getPolicies (args, finished) {
 
   try {
 
@@ -49,7 +46,7 @@ module.exports = async function getPatientDemographics (args, finished) {
     finished(responseObj);
   } catch (err) {
     
-    logger.error('apis/getPatientDemographics|err', err);
+    logger.error('apis/getPolicies|err', err);
 
     const responseError = getResponseError(err);
     
