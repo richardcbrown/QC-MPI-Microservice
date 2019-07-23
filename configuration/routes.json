@@ -3,5 +3,29 @@
     "uri": "/api/demographics/:patientId",
     "method": "GET",
     "handler": "getPatientDemographics"
+  },
+  {
+    "uri": "/api/fhir/getPolicies",
+    "method": "GET",
+    "handler": "getPolicies",
+    "from_microservices": [
+      "initialisation_service"
+    ]
+  },
+  {
+    "uri": "/api/fhir/getPatientConsent",
+    "method": "GET",
+    "handler": "getPatientConsent",
+    "from_microservices": [
+      "initialisation_service"
+    ]
+  },
+  {
+    "uri": "/api/fhir/postPatientConsent",
+    "method": "POST",
+    "handler": "postPatientConsent",
+    "from_microservices": [
+      "initialisation_service"
+    ]
   }
 ]

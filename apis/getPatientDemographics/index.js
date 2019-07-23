@@ -5,10 +5,7 @@
  | Copyright (c) 2019 Ripple Foundation Community Interest Company          |
  | All rights reserved.                                                     |
  |                                                                          |
- | http://rippleosi.org                                                     |
- | Email: code.custodian@rippleosi.org                                      |
- |                                                                          |
- | Author: Rob Tweed, M/Gateway Developments Ltd                            |
+ | Author: Richard Brown                                                    |
  |                                                                          |
  | Licensed under the Apache License, Version 2.0 (the "License");          |
  | you may not use this file except in compliance with the License.         |
@@ -23,7 +20,7 @@
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
 
-  14 March 2019
+  23 May 2019
 
 */
 

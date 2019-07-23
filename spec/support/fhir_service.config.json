@@ -4,7 +4,15 @@
     "path": "/AuthService/oauth/token",
     "grant_type": "client_credentials",
     "client_id": "clientId",
-    "client_secret": "clientSecret"
+    "client_secret": "clientSecret",
+    "assertion": {
+      "iss": "T1",
+      "aud": "T2",
+      "ods": "T3",
+      "scope": "T4",
+      "src": "T5"
+    },
+    "expires": 3600
   },
   "api": {
     "host": "https://test:444/FHIRService"
