@@ -1,12 +1,20 @@
 {
   "auth": {
-    "host": "AUTHHOST",
+    "host": "https://<AuthEndpoint>",
     "path": "/AuthService/oauth/token",
-    "grant_type": "client_credentials",
-    "client_id": "ClientId",
-    "client_secret": "ClientSecret"
+    "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+    "client_id": "<ClientId>",
+    "client_secret": "<ClientSecret>",
+    "expires": 3600,
+    "assertion": {
+      "iss": "Helm",
+      "aud": "YHCR",
+      "ods": "ODS",
+      "scope": "fhir.read",
+      "src": "ODS"
+    }
   },
   "api": {
-    "host": "<FHIRHOST>"
+    "host": "https://<FhirEndpoint>/FHIRService"
   }
 }

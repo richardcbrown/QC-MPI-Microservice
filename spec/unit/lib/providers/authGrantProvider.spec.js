@@ -1,8 +1,9 @@
 /*
 
  ----------------------------------------------------------------------------
+ | ripple-fhir-service: Ripple FHIR Interface                               |
  |                                                                          |
- | Copyright (c) 2019 Ripple Foundation Community Interest Company          |
+ | Copyright (c) 2017-19 Ripple Foundation Community Interest Company       |
  | All rights reserved.                                                     |
  |                                                                          |
  | http://rippleosi.org                                                     |
@@ -23,45 +24,45 @@
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
 
-  23 April 2019
+  17 April 2019
 
 */
 
-/*
+'use strict';
 
-  The beforeHandler module is invoked for EVERY incoming request handled by
-  the FHIR MicroService.
+const { ExecutionContextMock } = require('@tests/mocks');
+const ClientCredentialsGrantProvider = require('@lib/providers/clientCredentialsGrantProvider');
+const JwtBearerGrantProvider = require('@lib/providers/jwtBearerGrantProvider');
+const AuthGrantProvider = require('@lib/providers/authGrantProvider');
 
-  Here we use it to set up and maintain a QEWD session for the user - this
-  QEWD Session is used for data cacheing.
+describe('lib/providers/clientCredentialsGrantProvider', () => {
+  let ctx;
 
-  The QEWD function - this.qewdSessionByJWT - handles this
+  beforeEach(() => {
+    ctx = new ExecutionContextMock();
+  });
 
-  If this is the first time this user's JWT has been received, it will
-  create a new QEWD Session.  It uses the unique user-specific "uuid"
-  claim/property in the JWT as the QEWD Session token identifier
+  describe('#create (static)', () => {
+    it('should initialize a new instance of ClientCredentialsGrantProvider', async () => {
+      ctx.globalConfig.auth.grant_type = 'client_credentials';
 
-  On subsequent incoming requests from the user, the JWT's uuid claim will
-  be recognised as a pointer to an existing session, and that QEWD Session will
-  be re-allocated to the incoming request object.
+      const actual = AuthGrantProvider.create(ctx, ctx.globalConfig.auth);
 
-  The module always returns true to signal that the incoming request is to be
-  handled by its allocated handler module.
+      expect(actual).toEqual(jasmine.any(ClientCredentialsGrantProvider));
+    });
 
+    it('should initialize a new instance of JwtBearerGrantProvider', async () => {
+      ctx.globalConfig.auth.grant_type = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
 
-*/
+      const actual = AuthGrantProvider.create(ctx, ctx.globalConfig.auth);
 
-const { logger } = require('../lib/core');
-const { ExecutionContext } = require('../lib/core');
+      expect(actual).toEqual(jasmine.any(JwtBearerGrantProvider));
+    });
 
-module.exports = function (req, finished) { // eslint-disable-line no-unused-vars
+    it('should throw an error with an invalid grant_type', () => {
+      ctx.globalConfig.auth.grant_type = 'not_valid';
 
-  logger.info('beforeHandler in fhir_service invoked!');
-
-  req.qewdSession = this.qewdSessionByJWT.call(this, req);
-  req.ctx = ExecutionContext.fromQewdSession(this, req.qewdSession);
-
-  req.ctx.session = req.session;
-
-  return true;
-};
+      expect(() => AuthGrantProvider.create(ctx, ctx.globalConfig.auth)).toThrow(new Error('Invalid grant_type: not_valid, check configuration file.'));
+    });
+  });
+});

@@ -33,6 +33,7 @@
 const { ExecutionContextMock } = require('@tests/mocks');
 const AuthRestService = require('@lib/services/authRestService');
 const nock = require('nock');
+const fs = require('fs');
 
 describe('lib/services/authRestService', () => {
   let ctx;
@@ -67,6 +68,35 @@ describe('lib/services/authRestService', () => {
       });
 
     const actual = await authService.authenticate();
+
+    expect(nock).toHaveBeenDone();
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return token for jwt-bearer grant type', async () => {
+    const context = new ExecutionContextMock();
+    context.globalConfig.auth.privateKey = fs.readFileSync(__dirname + '/../../../support/testPrivateKey.pem');
+    context.globalConfig.auth.grant_type = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
+    context.session = {
+      openid: {}
+    };
+
+    const auth = new AuthRestService(context, context.globalConfig.auth);
+    
+    const expected = {
+      access_token: 'foo.bar.baz'
+    };
+
+    nock('https://test:444', {
+      reqheaders: {
+        authorization: `Basic ${ Buffer.from('clientId:clientSecret').toString('base64') }`
+      }})
+      .post('/AuthService/oauth/token')
+      .reply(200, {
+        access_token: 'foo.bar.baz'
+      });
+
+    const actual = await auth.authenticate();
 
     expect(nock).toHaveBeenDone();
     expect(actual).toEqual(expected);

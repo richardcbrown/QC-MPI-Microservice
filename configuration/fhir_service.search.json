@@ -1,8 +1,14 @@
 {
   "Patient": {
-    "nhsNumber": "identifier={{ Patient.nhsNumber }}"
+    "nhsNumber": "identifier=https://fhir.nhs.uk/Id/nhs-number|{{ Patient.nhsNumber }}"
   },
   "PractitionerRole": {
     "practitionerReference": "practitioner={{ PractitionerRole.practitionerReference }}"
+  },
+  "Policy": {
+    "name": "name={{ Policy.name }}"
+  },
+  "Consent": {
+    "consentor": "consentor={{ Consent.consentor }}"
   }
 }
