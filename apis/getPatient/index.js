@@ -1,15 +1,11 @@
 /*
 
  ----------------------------------------------------------------------------
- | ripple-fhir-service: Ripple FHIR Interface                     |
  |                                                                          |
- | Copyright (c) 2018-19 Ripple Foundation Community Interest Company       |
- | All rights reserved.                                                     |
+ | http://www.synanetics.com                                                |
+ | Email: support@synanetics.com                                            |
  |                                                                          |
- | http://rippleosi.org                                                     |
- | Email: code.custodian@rippleosi.org                                      |
- |                                                                          |
- | Author: Rob Tweed, M/Gateway Developments Ltd                            |
+ | Author: Richard Brown                                                    |
  |                                                                          |
  | Licensed under the Apache License, Version 2.0 (the "License");          |
  | you may not use this file except in compliance with the License.         |
@@ -24,22 +20,32 @@
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
 
-  14 March 2019
+  09 Oct 2019
 
 */
 
 'use strict';
 
-const GetDemographicsCommand = require('./getDemographicsCommand');
-const GetPatientConsentCommand = require('./getPatientConsentCommand');
-const GetPoliciesCommand = require('./getPoliciesCommand');
-const PostConsentCommand = require('./postConsentCommand');
-const GetPatientCommand = require('./getPatientCommand');
+const { logger } = require('../../lib/core');
+const { GetPatientCommand } = require('../../lib/commands');
+const { getResponseError } = require('../../lib/errors');
 
-module.exports = {
-  GetDemographicsCommand,
-  GetPatientConsentCommand,
-  GetPoliciesCommand,
-  PostConsentCommand,
-  GetPatientCommand
+/**
+ * @param  {Object} args
+ * @param  {Function} finished
+ */
+module.exports = async function getPatient(args, finished) {
+  try {
+    const command = new GetPatientCommand(args.req.ctx, args.session);
+    const responseObj = await command.execute(args.patientId);
+    
+    finished(responseObj);
+  } catch (err) {
+    
+    logger.error('apis/getPatient|err', err);
+
+    const responseError = getResponseError(err);
+    
+    finished(responseError);
+  }
 };
