@@ -2,23 +2,37 @@
   {
     "uri": "/api/demographics/:patientId",
     "method": "GET",
-    "handler": "getPatientDemographics"
+    "handler": "getPatientDemographics",
+    "on_microservice": "fhir_service"
   },
   {
     "uri": "/api/fhir/getPolicies",
     "method": "GET",
     "handler": "getPolicies",
     "from_microservices": [
-      "initialisation_service"
-    ]
+      "initialisation_service",
+      "transformation_service"
+    ],
+    "on_microservice": "fhir_service"
   },
   {
-    "uri": "/api/fhir/getPatientConsent",
+    "uri": "/api/fhir/patient/:patientId",
+    "method": "GET",
+    "handler": "getPatient",
+    "from_microservices": [
+      "transformation_service"
+    ],
+    "on_microservice": "fhir_service"
+  },
+  {
+    "uri": "/api/fhir/getPatientConsent/:patientId",
     "method": "GET",
     "handler": "getPatientConsent",
     "from_microservices": [
-      "initialisation_service"
-    ]
+      "initialisation_service",
+      "transformation_service"
+    ],
+    "on_microservice": "fhir_service"
   },
   {
     "uri": "/api/fhir/postPatientConsent",
@@ -26,6 +40,7 @@
     "handler": "postPatientConsent",
     "from_microservices": [
       "initialisation_service"
-    ]
+    ],
+    "on_microservice": "fhir_service"
   }
 ]
