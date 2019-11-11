@@ -23,17 +23,17 @@
     ]
   },
   "dependencies": {
-    "bluebird": "^3.5.3",
+    "bluebird": "^3.5.5",
     "fast-safe-stringify": "^2.0.6",
     "jsonschema": "^1.2.4",
-    "moment-timezone": "^0.5.20",
-    "openid-client": "^2.4.5",
+    "moment-timezone": "^0.5.26",
+    "openid-client": "^2.5.0",
     "qewd-router": "^1.13.1",
     "qewd-template": "^1.1.2",
     "qewd-transform-json": "^1.10.0",
     "request": "^2.87.0",
     "valid-url": "^1.0.9",
-    "winston": "^3.1.0"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "coveralls": "^3.0.0",

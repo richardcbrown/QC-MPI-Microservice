@@ -20,7 +20,9 @@
     "method": "GET",
     "handler": "getPatient",
     "from_microservices": [
-      "transformation_service"
+      "transformation_service",
+      "consent_service",
+      "careplan_service"
     ],
     "on_microservice": "fhir_service"
   },
@@ -40,6 +42,24 @@
     "handler": "postPatientConsent",
     "from_microservices": [
       "initialisation_service"
+    ],
+    "on_microservice": "fhir_service"
+  },
+  {
+    "uri": "/api/fhir/resources/:resourceType",
+    "method": "GET",
+    "handler": "getResources",
+    "from_microservices": [
+      "careplan_service"
+    ],
+    "on_microservice": "fhir_service"
+  },
+  {
+    "uri": "/api/fhir/resources/:resourceType/:id",
+    "method": "GET",
+    "handler": "getResources",
+    "from_microservices": [
+      "careplan_service"
     ],
     "on_microservice": "fhir_service"
   }
