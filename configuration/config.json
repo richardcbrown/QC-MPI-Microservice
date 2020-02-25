@@ -1,4 +1,8 @@
 {
   "qewd_up": true,
-  "ms_name": "fhir_service"
+  "ms_name": "fhir_service",
+  "jwt": {
+    "secret": "d49c7d87-4386-403f-b768-60179babb867"
+  },
+  "imported": true
 }
