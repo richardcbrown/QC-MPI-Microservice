@@ -4,3 +4,6 @@ coverage/
 www/
 package-lock.json
 privateKey.key
+logs
+configuration
+yottaDB
