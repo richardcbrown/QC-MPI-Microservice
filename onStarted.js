@@ -26,33 +26,8 @@
 
 'use strict';
 
-const { logger } = require('../../lib/core');
-const { GetPoliciesCommand } = require('../../lib/commands');
-const { getResponseError } = require('../../lib/errors');
-const url = require('url');
-const fileLogger = require('../../logger').logger;
+require('./logger');
 
+module.exports = function() {
 
-/**
- * @param  {Object} args
- * @param  {Function} finished
- */
-module.exports = async function getPolicies (args, finished) {
-
-  try {
-
-    const query = url.parse(args.req.path, true).query;
-    const command = new GetPoliciesCommand(args.req.ctx, args.session);
-    const responseObj = await command.execute(query.name);
-    
-    finished(responseObj);
-  } catch (err) {
-    
-    fileLogger.error('', err);
-    logger.error('apis/getPolicies|err', err);
-
-    const responseError = getResponseError(err);
-    
-    finished(responseError);
-  }
 };

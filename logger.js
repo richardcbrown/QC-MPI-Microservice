@@ -26,33 +26,43 @@
 
 'use strict';
 
-const { logger } = require('../../lib/core');
-const { GetPoliciesCommand } = require('../../lib/commands');
-const { getResponseError } = require('../../lib/errors');
-const url = require('url');
-const fileLogger = require('../../logger').logger;
+const winston = require('winston');
+require('winston-daily-rotate-file');
 
+let logger = null;
 
-/**
- * @param  {Object} args
- * @param  {Function} finished
- */
-module.exports = async function getPolicies (args, finished) {
+var errorTransport = new (winston.transports.DailyRotateFile)({
+    filename: 'logs/error-%DATE%.log',
+    datePattern: 'YYYY-MM-DD',
+    maxSize: '20m',
+    maxFiles: '2d',
+    createSymlink: true,
+    symlinkName: 'error.log'
+});
 
-  try {
-
-    const query = url.parse(args.req.path, true).query;
-    const command = new GetPoliciesCommand(args.req.ctx, args.session);
-    const responseObj = await command.execute(query.name);
-    
-    finished(responseObj);
-  } catch (err) {
-    
-    fileLogger.error('', err);
-    logger.error('apis/getPolicies|err', err);
-
-    const responseError = getResponseError(err);
-    
-    finished(responseError);
+function buildLogger(serviceName) {
+  if (logger) {
+    return;
   }
-};
+  
+  logger = winston.createLogger({
+    level: 'error',
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json()
+      ),
+    defaultMeta: { service: serviceName },
+    transports: [
+        errorTransport
+    ]
+  });
+
+  // Call exceptions.handle with a transport to handle exceptions
+  logger.exceptions.handle(
+    errorTransport
+  );
+}
+
+buildLogger('fhir_service');
+
+module.exports = { logger };

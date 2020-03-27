@@ -7,5 +7,6 @@
     "bluebird",
     "fast-safe-stringify",
     "uuid",
-    "winston"
+    "winston",
+    "winston-daily-rotate-file"
 ]
