@@ -2,8 +2,8 @@
 
  ----------------------------------------------------------------------------
  |                                                                          |
- | Copyright (c) 2019 Ripple Foundation Community Interest Company          |
- | All rights reserved.                                                     |
+ | http://www.synanetics.com                                                |
+ | Email: support@synanetics.com                                            |
  |                                                                          |
  | Author: Richard Brown                                                    |
  |                                                                          |
@@ -20,7 +20,7 @@
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
 
-  23 May 2019
+  17 Mar 2020
 
 */
 
@@ -29,6 +29,8 @@
 const { logger } = require('../../lib/core');
 const { GetPatientConsentCommand } = require('../../lib/commands');
 const { getResponseError } = require('../../lib/errors');
+const fileLogger = require('../../logger').logger;
+
 
 /**
  * @param  {Object} args
@@ -42,6 +44,7 @@ module.exports = async function getPatientConsent (args, finished) {
     finished(responseObj);
   } catch (err) {
     
+    fileLogger.error('', err);
     logger.error('apis/getPatientConsent|err', err);
 
     const responseError = getResponseError(err);

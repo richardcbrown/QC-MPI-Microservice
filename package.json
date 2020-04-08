@@ -33,7 +33,8 @@
     "qewd-transform-json": "^1.10.0",
     "request": "^2.87.0",
     "valid-url": "^1.0.9",
-    "winston": "^3.1.0"
+    "winston": "^3.1.0",
+    "winston-daily-rotate-file": "^4.4.2"
   },
   "devDependencies": {
     "coveralls": "^3.0.0",

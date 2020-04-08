@@ -1,11 +1,9 @@
 /*
+
  ----------------------------------------------------------------------------
  |                                                                          |
- | Copyright (c) 2019 Ripple Foundation Community Interest Company          |
- | All rights reserved.                                                     |
- |                                                                          |
- | http://rippleosi.org                                                     |
- | Email: code.custodian@rippleosi.org                                      |
+ | http://www.synanetics.com                                                |
+ | Email: support@synanetics.com                                            |
  |                                                                          |
  | Author: Richard Brown                                                    |
  |                                                                          |
@@ -21,13 +19,18 @@
  | See the License for the specific language governing permissions and      |
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
-  23 April 2019
+
+  17 Mar 2020
+
 */
+
+'use strict';
 
 const fs = require('fs');
 const { logger } = require('./lib/core');
 const config = require('./configuration/fhir_service.config');
 const searchConfig = require('./configuration/fhir_service.search');
+const fileLogger = require('./logger').logger;
 
 /* 
   allows bypass of certificate validation
@@ -40,13 +43,16 @@ if (config.rejectUnauthorized === false) {
 }
 
 module.exports = async function () {
+  try {
+    logger.info('FhirService - onWorkerLoad');
 
-  logger.info('FhirService - onWorkerLoad');
+    this.userDefined.globalConfig = config;
+    this.userDefined.searchConfig = searchConfig;
 
-  this.userDefined.globalConfig = config;
-  this.userDefined.searchConfig = searchConfig;
-
-  if (config.auth.grant_type === 'urn:ietf:params:oauth:grant-type:jwt-bearer') {
-    this.userDefined.globalConfig.auth.privateKey = fs.readFileSync(__dirname + '/configuration/privateKey.key');
+    if (config.auth.grant_type === 'urn:ietf:params:oauth:grant-type:jwt-bearer') {
+      this.userDefined.globalConfig.auth.privateKey = fs.readFileSync(__dirname + '/configuration/privateKey.key');
+    }
+  } catch (error) {
+    fileLogger.error('', error);
   }
 };

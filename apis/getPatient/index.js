@@ -20,7 +20,7 @@
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
 
-  09 Oct 2019
+  17 Mar 2020
 
 */
 
@@ -29,6 +29,7 @@
 const { logger } = require('../../lib/core');
 const { GetPatientCommand } = require('../../lib/commands');
 const { getResponseError } = require('../../lib/errors');
+const fileLogger = require('../../logger').logger;
 
 /**
  * @param  {Object} args
@@ -42,6 +43,7 @@ module.exports = async function getPatient(args, finished) {
     finished(responseObj);
   } catch (err) {
     
+    fileLogger.error('', err);
     logger.error('apis/getPatient|err', err);
 
     const responseError = getResponseError(err);
