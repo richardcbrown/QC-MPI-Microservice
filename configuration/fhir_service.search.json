@@ -6,7 +6,7 @@
     "practitionerReference": "practitioner={{ PractitionerRole.practitionerReference }}"
   },
   "Policy": {
-    "name": "name={{ Policy.name }}"
+    "name": "name:exact={{ Policy.name }}"
   },
   "Consent": {
     "consentor": "consentor={{ Consent.consentor }}"

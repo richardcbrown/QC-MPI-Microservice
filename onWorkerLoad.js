@@ -31,6 +31,7 @@ const { logger } = require('./lib/core');
 const config = require('./configuration/fhir_service.config');
 const searchConfig = require('./configuration/fhir_service.search');
 const fileLogger = require('./logger').logger;
+const path = require("path")
 
 /* 
   allows bypass of certificate validation
@@ -42,16 +43,28 @@ if (config.rejectUnauthorized === false) {
   process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 }
 
-module.exports = async function () {
+module.exports = function () {
   try {
     logger.info('FhirService - onWorkerLoad');
 
     this.userDefined.globalConfig = config;
     this.userDefined.searchConfig = searchConfig;
 
-    if (config.auth.grant_type === 'urn:ietf:params:oauth:grant-type:jwt-bearer') {
-      this.userDefined.globalConfig.auth.privateKey = fs.readFileSync(__dirname + '/configuration/privateKey.key');
+    this.userDefined.globalConfig.auth.env = config.env
+    this.userDefined.globalConfig.api.env = config.env
+
+    if (config.env !== 'local') {
+        this.userDefined.globalConfig.auth.passphrase = this.userDefined.globalConfig.passphrase;
+        this.userDefined.globalConfig.auth.certFile = fs.readFileSync(path.join(__dirname, this.userDefined.globalConfig.certFile));
+        this.userDefined.globalConfig.auth.privateKey = fs.readFileSync(path.join(__dirname, this.userDefined.globalConfig.privateKey));
+        this.userDefined.globalConfig.auth.caFile = fs.readFileSync(path.join(__dirname, this.userDefined.globalConfig.caFile));
+   
+        this.userDefined.globalConfig.api.passphrase = this.userDefined.globalConfig.passphrase;
+        this.userDefined.globalConfig.api.certFile = fs.readFileSync(path.join(__dirname, this.userDefined.globalConfig.certFile));
+        this.userDefined.globalConfig.api.privateKey = fs.readFileSync(path.join(__dirname, this.userDefined.globalConfig.privateKey));
+        this.userDefined.globalConfig.api.caFile = fs.readFileSync(path.join(__dirname, this.userDefined.globalConfig.caFile));
     }
+
   } catch (error) {
     fileLogger.error('', error);
   }
