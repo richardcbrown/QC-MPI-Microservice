@@ -54,6 +54,8 @@ module.exports = function () {
     this.userDefined.globalConfig.api.env = config.env
 
     if (config.env !== 'local') {
+        this.userDefined.globalConfig.auth.signingPassphrase = this.userDefined.globalConfig.signingPassphrase;
+        this.userDefined.globalConfig.auth.signingPrivateKey = fs.readFileSync(path.join(__dirname, this.userDefined.globalConfig.signingPrivateKey));
         this.userDefined.globalConfig.auth.passphrase = this.userDefined.globalConfig.passphrase;
         this.userDefined.globalConfig.auth.certFile = fs.readFileSync(path.join(__dirname, this.userDefined.globalConfig.certFile));
         this.userDefined.globalConfig.auth.privateKey = fs.readFileSync(path.join(__dirname, this.userDefined.globalConfig.privateKey));
