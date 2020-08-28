@@ -8,5 +8,6 @@
     "fast-safe-stringify",
     "uuid",
     "winston",
-    "winston-daily-rotate-file"
+    "winston-daily-rotate-file",
+    "jsonwebtoken"
 ]
