@@ -2,6 +2,7 @@
   "address": "{{address}}",
   "gender": "{{gender}}",
   "gpAddress": "{{gpAddress}}",
+  "gpFullAddress": "{{gpFullAddress}}",
   "gpName": "{{gpName}}",
   "id": "{{id}}",
   "name": "{{name}}",
