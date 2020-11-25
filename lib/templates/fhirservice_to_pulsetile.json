@@ -8,5 +8,6 @@
   "nhsNumber": "{{nhsNumber}}",
   "phone": "{{telephone}}",
   "dateOfBirth": "{{dateOfBirth}}",
-  "email": "{{email}}"
+  "email": "{{email}}",
+  "resolved": "{{resolved}}"
 }
